@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+<<<<<<< HEAD
 import { Instrument_Sans } from "next/font/google";
 import { Inter } from "next/font/google";
+=======
+import Navbar from "./Components/__organisms/Navbar/Navbar";
+>>>>>>> efee61df5b4d445b0d79fb0d0bc0e77f4f56dfb3
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -27,7 +31,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+<<<<<<< HEAD
       <body className={inter.className}>{children}</body>
+=======
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FAFAFA]`}
+      >
+        <Navbar/>
+        {children}
+      </body>
+>>>>>>> efee61df5b4d445b0d79fb0d0bc0e77f4f56dfb3
     </html>
   );
 }
