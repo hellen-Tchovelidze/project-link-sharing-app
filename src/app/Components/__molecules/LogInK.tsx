@@ -5,8 +5,8 @@ import ButtonK from "../__atoms/ButtonK";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import SignUpK from "./SignUpK";
 import { BlockK, LinkK, MailK } from "@/app/Common/Images/Auth";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   email: string;
@@ -14,53 +14,43 @@ type FormValues = {
 };
 
 const schema = yup.object().shape({
-  email: yup.string().required("can't be empty!").email("doesn't match"),
+  email: yup.string().required("can't be empty!").email(" "),
   password: yup
     .string()
     .required("Please enter your password.")
-    .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-      "doesn't match"
-    ),
+    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, " "),
 });
 
-const LogInK = () => {
+const LogInK = ({ setShow }: any) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({ resolver: yupResolver(schema) });
-
-  const [showSignUp, setShowSignUp] = useState(false);
-
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("loggedIn");
-  }, []);
+  const router = useRouter();
 
   const onSubmit = (data: FormValues) => {
-    const storedUser = localStorage.getItem("user");
+    const storedUsers = localStorage.getItem("users");
 
-    if (!storedUser) {
+    if (!storedUsers) {
       alert("ანგარიში არ არსებობს!");
       return;
     }
 
-    const parsedUser = JSON.parse(storedUser);
+    const parsedUsers = JSON.parse(storedUsers);
 
-    if (
-      data.email === parsedUser.email &&
-      data.password === parsedUser.password
-    ) {
-      alert("თქვენ წარმატებით გაიარეთ რეგისტრაცია!");
-      localStorage.setItem("loggedIn", "true");
+    const matchingUser = parsedUsers.find(
+      (user: FormValues) =>
+        user.email === data.email && user.password === data.password
+    );
+
+    if (matchingUser) {
+      localStorage.setItem("currentUser", JSON.stringify(matchingUser));
+      router.push("/main");
     } else {
       alert("სცადეთ ხელახლა!");
     }
   };
-
-  if (showSignUp) {
-    return <SignUpK />;
-  }
 
   return (
     <div className="sm:w-[100%] sm:h-[100vh] bg-[#F2F3F5] flex sm:items-center p-5 sm:justify-center w-[100%] h-[100vh]">
@@ -142,7 +132,7 @@ const LogInK = () => {
           <p className="text-gray-400 w-[100%] text-[13px] cursor-pointer sm:gap-2 sm:ml-14 text-center mt-4 flex flex-col sm:flex-row">
             Don’t have an account?
             <span
-              onClick={(console.log("done"), () => setShowSignUp(true))}
+              onClick={() => setShow(true)}
               className="text-purple-700 text-center font-semibold"
             >
               Create account

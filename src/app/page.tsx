@@ -1,9 +1,9 @@
-import LogInK from "./Components/__molecules/LogInK";
+import Author from "./Components/__organisms/Author";
 
 export default function Home() {
   return (
     <div>
-      <LogInK />
+      <Author />
     </div>
   );
 }
