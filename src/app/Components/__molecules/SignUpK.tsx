@@ -1,12 +1,12 @@
 "use client";
 
-import { BlockK, LinkK, MailK } from "@/app/Common/Images";
 import ButtonK from "../__atoms/ButtonK";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import LogInK from "./LogInK";
+import { BlockK, LinkK, MailK } from "@/app/Common/Images/Auth";
 
 type FormValues = {
   email: string;

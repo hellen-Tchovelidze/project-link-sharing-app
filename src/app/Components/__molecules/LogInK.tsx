@@ -1,12 +1,12 @@
 "use client";
 
-import { BlockK, LinkK, MailK } from "@/app/Common/Images";
 import React, { useEffect, useState } from "react";
 import ButtonK from "../__atoms/ButtonK";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import SignUpK from "./SignUpK";
+import { BlockK, LinkK, MailK } from "@/app/Common/Images/Auth";
 
 type FormValues = {
   email: string;
@@ -64,13 +64,13 @@ const LogInK = () => {
 
   return (
     <div className="sm:w-[100%] sm:h-[100vh] bg-[#F2F3F5] flex sm:items-center p-5 sm:justify-center w-[100%] h-[100vh]">
-      <div className="w-[390px] sm:h-[450px] flex flex-col items-center sm:justify-between bg-[#F2F3F5]">
+      <div className="w-[390px] sm:h-[440px]  sm:mt-[-40px] flex flex-col items-center sm:justify-between bg-[#F2F3F5]">
         <div className="w-[100%] pl-1 flex sm:items-center sm:justify-center gap-1 mb-12">
           <LinkK />
           <h1 className="font-[inter] font-semibold text-3xl">devlinks</h1>
         </div>
 
-        <div className="sm:w-[390px] sm:h-[380px] h-[350px] flex flex-col justify-between sm:bg-amber-50 rounded-[10px] sm:p-6">
+        <div className="sm:w-[390px] w-[100%] sm:h-[380px] h-[350px] flex flex-col justify-between sm:bg-amber-50 rounded-[10px] sm:p-6">
           <div>
             <h1 className="font-[inter] font-extrabold text-[30px] mb-1">
               Login
@@ -139,15 +139,15 @@ const LogInK = () => {
             <ButtonK type="submit" button="Login" />
           </form>
 
-          <button
-            onClick={() => setShowSignUp(true)}
-            className="text-gray-400 w-[100%] text-[13px] cursor-pointer sm:gap-2 sm:ml-14 text-center mt-4 flex flex-col sm:flex-row"
-          >
+          <p className="text-gray-400 w-[100%] text-[13px] cursor-pointer sm:gap-2 sm:ml-14 text-center mt-4 flex flex-col sm:flex-row">
             Don’t have an account?
-            <span className="text-purple-700 text-center font-semibold">
+            <span
+              onClick={(console.log("done"), () => setShowSignUp(true))}
+              className="text-purple-700 text-center font-semibold"
+            >
               Create account
             </span>
-          </button>
+          </p>
         </div>
       </div>
     </div>
