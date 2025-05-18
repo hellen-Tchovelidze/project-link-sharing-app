@@ -1,9 +1,8 @@
-import React from 'react'
+import MainPage from "@/app/Components/__organisms/MainPage/MainPage";
+import React from "react";
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  return <MainPage/>  
+};
 
-export default page
+export default page;
