@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ButtonK from "../__atoms/ButtonK";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -13,6 +13,10 @@ type FormValues = {
   password: string;
 };
 
+type LogInKProps = {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const schema = yup.object().shape({
   email: yup.string().required("can't be empty!").email(" "),
   password: yup
@@ -21,7 +25,7 @@ const schema = yup.object().shape({
     .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, " "),
 });
 
-const LogInK = ({ setShow }: any) => {
+const LogInK = ({ setShow }: LogInKProps) => {
   const {
     register,
     handleSubmit,

@@ -12,9 +12,9 @@ type FormValues = {
   confirmPassword: string;
 };
 
-interface Props {
-  email: string;
-}
+type LogInKProps = {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const schema = yup.object().shape({
   email: yup
@@ -38,7 +38,7 @@ const schema = yup.object().shape({
     .required("Confirm password!"),
 });
 
-const SignUpK = ({ setShow }: any) => {
+const SignUpK = ({ setShow }: LogInKProps) => {
   const {
     register,
     handleSubmit,
@@ -53,7 +53,7 @@ const SignUpK = ({ setShow }: any) => {
 
     const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
     const emailAlreadyExists = existingUsers.some(
-      (user: Props) => user.email === newUser.email
+      (user: FormValues) => user.email === newUser.email
     );
 
     if (emailAlreadyExists) {
