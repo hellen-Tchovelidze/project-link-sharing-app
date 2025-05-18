@@ -11,9 +11,20 @@ import LinkedinIcon from "@/app/Common/Images/LinkedinIcon";
 import LinksIcon from "@/app/Common/Images/LinksIcon";
 import LinksSvg from "@/app/Common/Images/LinksSvg";
 import YoutubeIcon from "@/app/Common/Images/YoutubeIcon";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-const LinksArray = ({ linksArr, setLinksArr }: any) => {
+interface LinkItem {
+  id: number;
+  platform: string;
+  link: string;
+}
+
+interface LinksArrayProps {
+  linksArr: LinkItem[];
+  setLinksArr: React.Dispatch<React.SetStateAction<LinkItem[]>>;
+}
+
+const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
   const modalPlatforms = [
     { icon: <GithubIcon />, text: "GitHub" },
     { icon: <YoutubeIcon />, text: "YouTube" },
@@ -26,6 +37,14 @@ const LinksArray = ({ linksArr, setLinksArr }: any) => {
   ];
 
   const [showModal, setShowModal] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  function handleClickOutside(e: any) {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setShowModal(null);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
 
   const deleteLink = (id: number) => {
     setLinksArr(linksArr.filter((item: any) => item.id !== id));
@@ -45,9 +64,7 @@ const LinksArray = ({ linksArr, setLinksArr }: any) => {
 
   const handlePlatformSelect = (id: number, platform: string) => {
     setLinksArr((prev: any) =>
-      prev.map((item: any) =>
-        item.id === id ? { ...item, platform } : item
-      )
+      prev.map((item: any) => (item.id === id ? { ...item, platform } : item))
     );
     setShowModal(null);
   };
@@ -78,11 +95,16 @@ const LinksArray = ({ linksArr, setLinksArr }: any) => {
   return (
     <div>
       {linksArr.map((item: any) => (
-        <div key={item.id} className="p-[20px] flex flex-col cursor-pointer gap-[12px]">
+        <div
+          key={item.id}
+          className="p-[20px] flex flex-col cursor-pointer gap-[12px]"
+        >
           <div className="flex justify-between">
             <div className="flex gap-[8px] items-center">
               <LinksIcon />
-              <p className="text-[16px] text-[#737373] font-bold">Link #{item.id}</p>
+              <p className="text-[16px] text-[#737373] font-bold">
+                Link #{item.id}
+              </p>
             </div>
             <p
               onClick={() => deleteLink(item.id)}
@@ -99,10 +121,8 @@ const LinksArray = ({ linksArr, setLinksArr }: any) => {
               className="py-[12px] px-[16px] border rounded-[8px] border-[#D9D9D9] bg-[#FFF] flex justify-between items-center relative"
             >
               <div className="flex gap-[8px] items-center">
-                {getPlatformIcon(item.platform) || <GithubIcon />}
-                <p className="text-[16px] text-[#333]">
-                  {item.platform || "select platfrom"}
-                </p>
+                {getPlatformIcon(item.platform)}
+                <p className="text-[16px] text-[#333]">{item.platform}</p>
               </div>
               <div
                 className={`transition-transform duration-500 ${
@@ -113,7 +133,7 @@ const LinksArray = ({ linksArr, setLinksArr }: any) => {
               </div>
 
               {showModal === item.id && (
-                <div className="py-[12px] px-[16px] border border-[#D9D9D9] rounded-[8px] flex flex-col absolute top-[60px] left-0 w-full z-50 bg-white max-h-[300px] overflow-y-auto">
+                <div ref={modalRef} className="py-[12px] px-[16px] border border-[#D9D9D9] rounded-[8px] flex flex-col absolute top-[60px] left-0 w-full z-50 bg-white max-h-[300px] overflow-y-auto">
                   {modalPlatforms.map((p, i) => (
                     <div
                       key={i}
@@ -142,8 +162,10 @@ const LinksArray = ({ linksArr, setLinksArr }: any) => {
                 className="text-[16px] text-[#333] outline-0 w-full"
                 placeholder="e.g. https://www.github.com/johnappleseed"
               />
-              {item.link.trim().length === 0 && (
-                <p className="text-[12px] text-[#FF3939] w-[110px]">Can’t be empty</p>
+              {item.error && (
+                <p className="text-[12px] text-[#FF3939] w-[110px] max-[595px]:w-[115px] max-[550px]:w-[120px] max-[515px]:w-[130px] max-[451px]:w-[150px] max-[396px]:w-[170px]">
+                  Can’t be empty
+                </p>
               )}
             </div>
           </div>
