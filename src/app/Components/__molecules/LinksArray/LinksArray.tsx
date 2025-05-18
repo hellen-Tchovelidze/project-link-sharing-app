@@ -11,18 +11,9 @@ import LinkedinIcon from "@/app/Common/Images/LinkedinIcon";
 import LinksIcon from "@/app/Common/Images/LinksIcon";
 import LinksSvg from "@/app/Common/Images/LinksSvg";
 import YoutubeIcon from "@/app/Common/Images/YoutubeIcon";
-import { useRef, useState } from "react";
+import { LinkItem, LinksArrayProps } from "@/app/Common/Types/types";
+import { useEffect, useRef, useState } from "react";
 
-interface LinkItem {
-  id: number;
-  platform: string;
-  link: string;
-}
-
-interface LinksArrayProps {
-  linksArr: LinkItem[];
-  setLinksArr: React.Dispatch<React.SetStateAction<LinkItem[]>>;
-}
 
 const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
   const modalPlatforms = [
@@ -38,16 +29,25 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
 
   const [showModal, setShowModal] = useState<number | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
-  function handleClickOutside(e: any) {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      setShowModal(null);
-    }
-  }
 
-  document.addEventListener("mousedown", handleClickOutside);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setShowModal(null);
+      }
+    };
+
+    if (showModal !== null) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showModal]);
 
   const deleteLink = (id: number) => {
-    setLinksArr(linksArr.filter((item: any) => item.id !== id));
+    setLinksArr(linksArr.filter((item) => item.id !== id));
   };
 
   const openModal = (id: number) => {
@@ -55,16 +55,14 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
   };
 
   const handleInputChange = (id: number, value: string) => {
-    setLinksArr((prev: any) =>
-      prev.map((item: any) =>
-        item.id === id ? { ...item, link: value } : item
-      )
+    setLinksArr((prev: LinkItem[]) =>
+      prev.map((item) => (item.id === id ? { ...item, link: value } : item))
     );
   };
 
   const handlePlatformSelect = (id: number, platform: string) => {
-    setLinksArr((prev: any) =>
-      prev.map((item: any) => (item.id === id ? { ...item, platform } : item))
+    setLinksArr((prev: LinkItem[]) =>
+      prev.map((item) => (item.id === id ? { ...item, platform } : item))
     );
     setShowModal(null);
   };
@@ -94,17 +92,12 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
 
   return (
     <div>
-      {linksArr.map((item: any) => (
-        <div
-          key={item.id}
-          className="p-[20px] flex flex-col cursor-pointer gap-[12px]"
-        >
+      {linksArr.map((item) => (
+        <div key={item.id} className="p-[20px] flex flex-col cursor-pointer gap-[12px]">
           <div className="flex justify-between">
             <div className="flex gap-[8px] items-center">
               <LinksIcon />
-              <p className="text-[16px] text-[#737373] font-bold">
-                Link #{item.id}
-              </p>
+              <p className="text-[16px] text-[#737373] font-bold">Link #{item.id}</p>
             </div>
             <p
               onClick={() => deleteLink(item.id)}
@@ -133,7 +126,10 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
               </div>
 
               {showModal === item.id && (
-                <div ref={modalRef} className="py-[12px] px-[16px] border border-[#D9D9D9] rounded-[8px] flex flex-col absolute top-[60px] left-0 w-full z-50 bg-white max-h-[300px] overflow-y-auto">
+                <div
+                  ref={modalRef}
+                  className="py-[12px] px-[16px] border border-[#D9D9D9] rounded-[8px] flex flex-col absolute top-[60px] left-0 w-full z-50 bg-white max-h-[300px] overflow-y-auto"
+                >
                   {modalPlatforms.map((p, i) => (
                     <div
                       key={i}

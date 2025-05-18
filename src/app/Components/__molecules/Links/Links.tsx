@@ -1,32 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import EmptyLinks from "../EmptyLinks/EmptyLinks";
 import LinksArray from "../LinksArray/LinksArray";
+import { LinkItem, LinksProps, SECLinkItem } from "@/app/Common/Types/types";
 
-const Links = ({ linksArr, setLinksArr, setShowLinks }: any) => {
-
+const Links: React.FC<LinksProps> = ({
+  linksArr,
+  setLinksArr,
+  setShowLinks,
+}) => {
   const addNewLink = () => {
-    if (linksArr.length >= 5) return console.log("u already got 5");
+    if (linksArr.length >= 5) return console.log("You already have 5 links");
     const lastId = linksArr[linksArr.length - 1]?.id || 0;
-    const newLink = { id: lastId + 1, platform: "GitHub", link: "" };
+    const newLink: SECLinkItem = {
+      id: lastId + 1,
+      platform: "GitHub",
+      link: "",
+      error: false,
+    };
     setLinksArr([...linksArr, newLink]);
   };
 
-const submitLink = () => {
-  const updatedLinks = linksArr.map((link: any) => ({
-    ...link,
-    error: !link.link.trim(),
-  }));
+  const submitLink = () => {
+    const updatedLinks = linksArr.map((link) => ({
+      ...link,
+      error: !link.link.trim(),
+    }));
 
-  setLinksArr(updatedLinks);
+    setLinksArr(updatedLinks);
 
-  const hasErrors = updatedLinks.some((link: any) => link.error);
-  if (hasErrors) return;
+    const hasErrors = updatedLinks.some((link) => link.error);
+    if (hasErrors) return;
 
-  setShowLinks(updatedLinks);
-  console.log("Submitting links:", updatedLinks);
-};
+    setShowLinks(updatedLinks);
+    console.log("Submitting links:", updatedLinks);
+  };
 
   return (
     <div className="p-[20px] bg-white flex flex-col gap-[40px]">
@@ -42,8 +51,8 @@ const submitLink = () => {
         </div>
 
         <button
-          onClick={() => addNewLink()}
-          className="text-[#633CFF] texxt-[16px] font-semibold max-w-[539px] px-[27px] py-[11px] flex items-center justify-center border border-[#633CFF] rounded-[8px] hover:bg-[#EFEBFF] cursor-pointer duration-300 "
+          onClick={addNewLink}
+          className="text-[#633CFF] text-[16px] font-semibold max-w-[539px] px-[27px] py-[11px] flex items-center justify-center border border-[#633CFF] rounded-[8px] hover:bg-[#EFEBFF] cursor-pointer duration-300"
         >
           + Add new link
         </button>
@@ -53,7 +62,11 @@ const submitLink = () => {
         {linksArr.length > 0 ? (
           <LinksArray
             linksArr={linksArr}
-            setLinksArr={setLinksArr}
+            setLinksArr={
+              setLinksArr as unknown as React.Dispatch<
+                React.SetStateAction<LinkItem[]>
+              >
+            }
           />
         ) : (
           <EmptyLinks />
@@ -61,9 +74,13 @@ const submitLink = () => {
       </div>
 
       <div className="bg-white py-[24px] w-full flex justify-end border-t border-[#D9D9D9]">
-        <div className={`w-[91px] h-[46px] bg-[#633CFF] flex justify-center items-center rounded-[8px] ${linksArr.length === 0 ? "opacity-25" : "cursor-pointer"}`}>
+        <div
+          className={`w-[91px] h-[46px] bg-[#633CFF] flex justify-center items-center rounded-[8px] ${
+            linksArr.length === 0 ? "opacity-25" : "cursor-pointer"
+          }`}
+        >
           <button
-            onClick={() => submitLink()}
+            onClick={submitLink}
             className="text-[16px] font-semibold text-white"
           >
             Save

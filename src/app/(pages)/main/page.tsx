@@ -1,4 +1,3 @@
-import PhoneSimulator from "@/app/Components/__molecules/PhoneSimulator/PhoneSimulator";
 import MainPage from "@/app/Components/__organisms/MainPage/MainPage";
 import React from "react";
 

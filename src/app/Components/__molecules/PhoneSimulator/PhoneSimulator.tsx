@@ -1,4 +1,3 @@
-import ArrowDown from "@/app/Common/Images/ArrowDown";
 import ArrowRight from "@/app/Common/Images/ArrowRight";
 import CodeWarsIcon from "@/app/Common/Images/CodeWarsIcon";
 import DevIcon from "@/app/Common/Images/DevIcon";
@@ -9,9 +8,10 @@ import GithubIcon from "@/app/Common/Images/GithubIcon";
 import LinkedinIcon from "@/app/Common/Images/LinkedinIcon";
 import PhoneSimulatorPhoneSimulatorSVG from "@/app/Common/Images/PhoneSimulatorPhoneSimulatorSVG";
 import YoutubeIcon from "@/app/Common/Images/YoutubeIcon";
+import { PhoneSimulatorProps } from "@/app/Common/Types/types";
 import React from "react";
 
-const PhoneSimulator = ({ ShowLinks }: any) => {
+const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({ ShowLinks }) => {
   const getPlatformIcon = (platform: string) => {
     switch (platform) {
       case "GitHub":
@@ -59,26 +59,19 @@ const PhoneSimulator = ({ ShowLinks }: any) => {
   return (
     <div className="w-[560px] p-[24px] flex items-start justify-start bg-white rounded-[12px] relative mt-[40px] max-[950px]:hidden">
       <PhoneSimulatorPhoneSimulatorSVG />
-
       <div className="absolute flex flex-col w-[237px] left-[59px] top-[304px] gap-[24px]">
-        {ShowLinks.map((item: any, i: number) => {
-          return (
-            <div
-              key={i}
-              className={`rounded-[8px] flex px-[16px] py-[11px] justify-between items-center ${getPlatformBgColor(
-                item.platform
-              )}`}
-            >
-              <div className="flex gap-[8px]">
-                {getPlatformIcon(item.platform)}
-
-                <p className="text-[12px] text-[#FFF]">{item.platform}</p>
-              </div>
-
-              <ArrowRight/>
+        {ShowLinks.map((item, i) => (
+          <div
+            key={i}
+            className={`rounded-[8px] flex px-[16px] py-[11px] justify-between items-center ${getPlatformBgColor(item.platform)}`}
+          >
+            <div className="flex gap-[8px]">
+              {getPlatformIcon(item.platform)}
+              <p className="text-[12px] text-[#FFF]">{item.platform}</p>
             </div>
-          );
-        })}
+            <ArrowRight />
+          </div>
+        ))}
       </div>
     </div>
   );
