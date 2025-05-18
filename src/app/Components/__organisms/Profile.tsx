@@ -6,7 +6,7 @@ import Input from "../__atoms/Input";
 import Label from "../__atoms/Label";
 import PhotoUpload from "../__molecules/PhotoUpload";
 
-export default function profileForm() {
+export default function ProfileForm() {
   const { firstName, lastName, email, photo, setField, setPhoto } =
     useProfileStore();
 

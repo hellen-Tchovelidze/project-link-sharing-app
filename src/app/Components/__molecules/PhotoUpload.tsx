@@ -1,6 +1,6 @@
 import { useProfileStore } from '../../Common/Store/store'
 import ImagesSvg from '../../Common/Images/imagesSvg/imagesSvg'
-
+import Image from 'next/image';
 
 
 export default function PhotoUpload() {
@@ -24,9 +24,11 @@ export default function PhotoUpload() {
 <h1  className=' text-[16px]'>Profile picture</h1>
      <div className=' bg-[#EFEBFF] flex flex-col items-center'>
      {photo ? (
-        <img
+        <Image
           src={photo}
           alt="Profile"
+          width={112}
+          height={112}
           className="w-28 h-28  object-cover border-4  shadow-lg"
         />
       ) : (
