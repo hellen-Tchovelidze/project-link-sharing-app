@@ -16,6 +16,10 @@ export interface LinkItem {
 
 export interface PhoneSimulatorProps {
   ShowLinks: LinkItem[];
+  firstName: string;
+  lastName: string;
+  email: string;
+  photo?: string | null;
 }
 
 
