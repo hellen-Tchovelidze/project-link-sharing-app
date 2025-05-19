@@ -59,7 +59,7 @@ export default function ProfileForm() {
         <PhotoUpload />
 
         <div className="space-y-5 bg-[#FAFAFA] p-6 rounded-xl">
-          <div className=" flex justify-between items-center max-[640px]:flex-col max-[640px]:items-start">
+          <div className=" flex justify-between items-center max-[660px]:flex-col max-[660px]:items-start">
             <Label>First name*</Label>
             <Input
               type="text"
@@ -71,7 +71,7 @@ export default function ProfileForm() {
             />
           </div>
 
-          <div className=" flex justify-between items-center max-[640px]:flex-col max-[640px]:items-start">
+          <div className=" flex justify-between items-center max-[660px]:flex-col max-[660px]:items-start">
             <Label>Last name*</Label>
             <Input
               type="text"
@@ -83,7 +83,7 @@ export default function ProfileForm() {
             />
           </div>
 
-          <div className=" flex justify-between items-center max-[640px]:flex-col max-[640px]:items-start">
+          <div className=" flex justify-between items-center max-[660px]:flex-col max-[660px]:items-start">
             <Label>Email</Label>
             <Input
               type="email"
