@@ -36,7 +36,38 @@ export interface SECLinkItem {
 }
 
 export interface LinksProps {
-  linksArr: SECLinkItem[]; // error required
-  setLinksArr: React.Dispatch<React.SetStateAction<SECLinkItem[]>>; // must match linksArr type
-  setShowLinks: (links: SECLinkItem[]) => void; // also consistent
+  linksArr: SECLinkItem[];
+  setLinksArr: React.Dispatch<React.SetStateAction<SECLinkItem[]>>;
+  setShowLinks: (links: SECLinkItem[]) => void;
+}
+
+
+export interface ProfileState {
+  firstName: string
+  lastName: string
+  email: string
+  photo: string | null
+  setField: (field: string, value: string) => void
+  setPhoto: (base64: string | null) => void
+}
+
+
+export interface User {
+  id:number,
+  email:string,
+  password:string
+}
+
+
+
+
+
+export interface LinkStore {
+  linksArr: LinkItem[];
+  showLinks: LinkItem[];
+  addLink: (newLink: LinkItem) => void;
+  updateLink: (updatedLink: LinkItem) => void;
+  deleteLink: (id: number) => void;
+  setShowLinks: (links: LinkItem[]) => void;
+  setLinksArr: (links: LinkItem[]) => void;
 }

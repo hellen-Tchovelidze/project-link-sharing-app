@@ -4,25 +4,34 @@ import EyeSvg from "@/app/Common/Images/eyeSvg";
 import LinksSvg from "@/app/Common/Images/LinksSvg";
 import NavbarMainImg from "@/app/Common/Images/NavbarMainImg";
 import ProfileSvg from "@/app/Common/Images/ProfileSvg";
+import { User } from "@/app/Common/Types/types";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
   const path = usePathname();
-    const router = useRouter()
+  const router = useRouter();
   const [indicatorX, setIndicatorX] = useState(0);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (path === "/main") setIndicatorX(0);
     if (path === "/profile") setIndicatorX(1);
   }, [path]);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <>
       <div
         className={`w-full p-6 ${
-          path === "/" || path === "/preview" ? "hidden" : ""
+          path === "/" || path === `/preview/${user?.id}` ? "hidden" : ""
         }`}
       >
         <div className="w-full pl-[24px] pr-[16px] py-4 bg-white max-[500px]:px-0">
@@ -70,33 +79,49 @@ const Navbar = () => {
               </Link>
             </div>
 
-            <Link href={"/preview"}>
+            <Link href={`/preview/${user?.id}`}>
               <div className="px-[54px] py-[22px] border border-[#633CFF] rounded-[8px] cursor-pointer hover:bg-[#EFEBFF] duration-500 max-[900px]:px-[32px]">
                 <p className="text-[#633CFF] text-[16px] font-semibold max-[900px]:hidden">
                   Preview
                 </p>
 
-                <EyeSvg/>
+                <EyeSvg />
               </div>
             </Link>
           </div>
         </div>
       </div>
 
-        {path === '/preview' &&
+      {path === `/preview/${user?.id}` && (
         <div className="w-full p-6 max-[700px]:p-0">
-            <div className="w-full pl-[24px] pr-[16px] py-4 bg-white flex items-center justify-between rounded-[12px]">
-                <div onClick={()=> router.back()} className="border border-[#633CFF] rounded-[8px] px-[54px] py-[22px] cursor-pointer max-[700px]:px-[27px] max-[700px]:py-[11px]">
-                    <p className="text-[16px] text-[#633CFF] font-semibold">Back to Editor</p>
-                </div>
-
-
-                <div className="bg-[#633CFF] rounded-[8px] px-[54px] py-[22px] cursor-pointer max-[700px]:px-[27px] max-[700px]:py-[11px]">
-                    <p className="text-[16px] text-white font-semibold">Share Link</p>
-                </div>
+          <div className="w-full pl-[24px] pr-[16px] py-4 bg-white flex items-center justify-between rounded-[12px]">
+            <div
+              onClick={() => router.back()}
+              className="border border-[#633CFF] rounded-[8px] px-[54px] py-[22px] cursor-pointer max-[700px]:px-[27px] max-[700px]:py-[11px]"
+            >
+              <p className="text-[16px] text-[#633CFF] font-semibold">
+                Back to Editor
+              </p>
             </div>
+
+            <div
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(window.location.href)
+                  .then(() => {
+                    alert("Link copied to clipboard!");
+                  })
+                  .catch((err) => {
+                    console.error("Failed to copy link: ", err);
+                  });
+              }}
+              className="bg-[#633CFF] rounded-[8px] px-[54px] py-[22px] cursor-pointer max-[700px]:px-[27px] max-[700px]:py-[11px]"
+            >
+              <p className="text-[16px] text-white font-semibold">Share Link</p>
+            </div>
+          </div>
         </div>
-        }
+      )}
     </>
   );
 };

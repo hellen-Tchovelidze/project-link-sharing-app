@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import ArrowDown from "@/app/Common/Images/ArrowDown";
 import CodeWarsIcon from "@/app/Common/Images/CodeWarsIcon";
 import DevIcon from "@/app/Common/Images/DevIcon";
@@ -11,11 +12,13 @@ import LinkedinIcon from "@/app/Common/Images/LinkedinIcon";
 import LinksIcon from "@/app/Common/Images/LinksIcon";
 import LinksSvg from "@/app/Common/Images/LinksSvg";
 import YoutubeIcon from "@/app/Common/Images/YoutubeIcon";
-import { LinkItem, LinksArrayProps } from "@/app/Common/Types/types";
-import { useEffect, useRef, useState } from "react";
+import { UseLinkStore } from "@/app/Common/Store/store";
 
+const LinksArray = () => {
+  const { linksArr, updateLink, deleteLink } = UseLinkStore();
+  const [showModal, setShowModal] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
-const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
   const modalPlatforms = [
     { icon: <GithubIcon />, text: "GitHub" },
     { icon: <YoutubeIcon />, text: "YouTube" },
@@ -26,9 +29,6 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
     { icon: <CodeWarsIcon />, text: "Codewars" },
     { icon: <FreeCodeCampIcon />, text: "freeCodeCamp" },
   ];
-
-  const [showModal, setShowModal] = useState<number | null>(null);
-  const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -46,24 +46,18 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
     };
   }, [showModal]);
 
-  const deleteLink = (id: number) => {
-    setLinksArr(linksArr.filter((item) => item.id !== id));
-  };
-
   const openModal = (id: number) => {
     setShowModal((prev) => (prev === id ? null : id));
   };
 
   const handleInputChange = (id: number, value: string) => {
-    setLinksArr((prev: LinkItem[]) =>
-      prev.map((item) => (item.id === id ? { ...item, link: value } : item))
-    );
+    const updated = linksArr.find((item) => item.id === id);
+    if (updated) updateLink({ ...updated, link: value });
   };
 
   const handlePlatformSelect = (id: number, platform: string) => {
-    setLinksArr((prev: LinkItem[]) =>
-      prev.map((item) => (item.id === id ? { ...item, platform } : item))
-    );
+    const updated = linksArr.find((item) => item.id === id);
+    if (updated) updateLink({ ...updated, platform });
     setShowModal(null);
   };
 
@@ -93,11 +87,16 @@ const LinksArray: React.FC<LinksArrayProps> = ({ linksArr, setLinksArr }) => {
   return (
     <div>
       {linksArr.map((item) => (
-        <div key={item.id} className="p-[20px] flex flex-col cursor-pointer gap-[12px]">
+        <div
+          key={item.id}
+          className="p-[20px] flex flex-col cursor-pointer gap-[12px]"
+        >
           <div className="flex justify-between">
             <div className="flex gap-[8px] items-center">
               <LinksIcon />
-              <p className="text-[16px] text-[#737373] font-bold">Link #{item.id}</p>
+              <p className="text-[16px] text-[#737373] font-bold">
+                Link #{item.id}
+              </p>
             </div>
             <p
               onClick={() => deleteLink(item.id)}

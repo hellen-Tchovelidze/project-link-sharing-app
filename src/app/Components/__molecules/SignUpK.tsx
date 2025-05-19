@@ -47,6 +47,7 @@ const SignUpK = ({ setShow }: LogInKProps) => {
 
   const onSubmit = (data: FormValues) => {
     const newUser = {
+      id:Date.now(),
       email: data.email,
       password: data.password,
     };

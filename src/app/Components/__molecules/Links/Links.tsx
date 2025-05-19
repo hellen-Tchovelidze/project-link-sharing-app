@@ -1,25 +1,22 @@
 "use client";
-
 import React from "react";
 import EmptyLinks from "../EmptyLinks/EmptyLinks";
 import LinksArray from "../LinksArray/LinksArray";
-import { LinkItem, LinksProps, SECLinkItem } from "@/app/Common/Types/types";
+import { UseLinkStore } from "@/app/Common/Store/store";
 
-const Links: React.FC<LinksProps> = ({
-  linksArr,
-  setLinksArr,
-  setShowLinks,
-}) => {
+const Links = () => {
+  const { linksArr, setLinksArr, addLink, setShowLinks } = UseLinkStore();
+
   const addNewLink = () => {
     if (linksArr.length >= 5) return console.log("You already have 5 links");
     const lastId = linksArr[linksArr.length - 1]?.id || 0;
-    const newLink: SECLinkItem = {
+    const newLink = {
       id: lastId + 1,
       platform: "GitHub",
       link: "",
       error: false,
     };
-    setLinksArr([...linksArr, newLink]);
+    addLink(newLink);
   };
 
   const submitLink = () => {
@@ -59,18 +56,7 @@ const Links: React.FC<LinksProps> = ({
       </div>
 
       <div className="min-h-[385px]">
-        {linksArr.length > 0 ? (
-          <LinksArray
-            linksArr={linksArr}
-            setLinksArr={
-              setLinksArr as unknown as React.Dispatch<
-                React.SetStateAction<LinkItem[]>
-              >
-            }
-          />
-        ) : (
-          <EmptyLinks />
-        )}
+        {linksArr.length > 0 ? <LinksArray /> : <EmptyLinks />}
       </div>
 
       <div className="bg-white py-[24px] w-full flex justify-end border-t border-[#D9D9D9]">
@@ -81,7 +67,7 @@ const Links: React.FC<LinksProps> = ({
         >
           <button
             onClick={submitLink}
-            className="text-[16px] font-semibold text-white"
+            className="text-[16px] font-semibold text-white w-full h-full"
           >
             Save
           </button>

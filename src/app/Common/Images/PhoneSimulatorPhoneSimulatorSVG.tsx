@@ -1,8 +1,21 @@
-import React from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { User } from "../Types/types";
 
 const PhoneSimulatorPhoneSimulatorSVG = () => {
+  const params = usePathname()
+   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <svg
+    className={`${params === `/preview/${user?.id}` && "-mt-[9px]"}`}
       width="308"
       height="632"
       viewBox="0 0 308 632"

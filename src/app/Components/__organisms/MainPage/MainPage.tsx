@@ -1,21 +1,24 @@
-'use client'
-
-import React, { useState } from "react";
+"use client";
+import React from "react";
 import PhoneSimulator from "../../__molecules/PhoneSimulator/PhoneSimulator";
 import Links from "../../__molecules/Links/Links";
-import { LinkItem } from "@/app/Common/Types/types";
+import { UseProfileStore } from "@/app/Common/Store/store";
+import { UseLinkStore } from "@/app/Common/Store/store";
 
 const MainPage = () => {
-  const [linksArr, setLinksArr] = useState([
-    { id: 1, platform: "GitHub", link: "",error: false  },
-  ]);
-  const [ShowLinks,setShowLinks] = useState<LinkItem[]>([])
+  const { firstName, lastName, email, photo } = UseProfileStore();
+  const { showLinks } = UseLinkStore();
 
-  console.log(linksArr)
   return (
     <div className="flex justify-center">
-      <PhoneSimulator ShowLinks={ShowLinks}/>
-      <Links  linksArr={linksArr} setLinksArr ={setLinksArr} setShowLinks={setShowLinks}/>
+      <PhoneSimulator
+        ShowLinks={showLinks}
+        firstName={firstName}
+        lastName={lastName}
+        photo={photo}
+        email={email}
+      />
+      <Links />
     </div>
   );
 };
