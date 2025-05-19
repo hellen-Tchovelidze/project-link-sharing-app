@@ -1,14 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useProfileStore } from "../../Common/Store/store";
 import Input from "../__atoms/Input";
 import Label from "../__atoms/Label";
 import PhotoUpload from "../__molecules/PhotoUpload";
+import PhoneSimulator from "../__molecules/PhoneSimulator/PhoneSimulator";
+import { LinkItem } from "@/app/Common/Types/types";
+
 
 export default function ProfileForm() {
+
+  const [ShowLinks, setShowLinks] = useState<LinkItem[]>([]);
+
+
   const { firstName, lastName, email, photo, setField, setPhoto } =
     useProfileStore();
+    
 
   useEffect(() => {
     const storedFirstName = localStorage.getItem("firstName");
@@ -32,7 +40,14 @@ export default function ProfileForm() {
   };
 
   return (
-    <form
+    <div className="flex justify-evenly w-full">
+     <PhoneSimulator firstName={firstName}
+  lastName={lastName}
+  photo={photo}
+  email={email}
+  ShowLinks={ShowLinks}
+/>
+      <form
       onSubmit={handleSubmit}
       className="max-w-[808px]  w-full mx-auto mt-10 p-6 bg-white shadow-2xl rounded-2xl space-y-8 "
     >
@@ -91,5 +106,6 @@ export default function ProfileForm() {
         </button>
       </div>
     </form>
+    </div>
   );
 }

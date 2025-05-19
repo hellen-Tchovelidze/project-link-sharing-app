@@ -10,8 +10,9 @@ import PhoneSimulatorPhoneSimulatorSVG from "@/app/Common/Images/PhoneSimulatorP
 import YoutubeIcon from "@/app/Common/Images/YoutubeIcon";
 import { PhoneSimulatorProps } from "@/app/Common/Types/types";
 import React from "react";
+import Image from "next/image";
 
-const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({ ShowLinks }) => {
+const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({ ShowLinks, firstName, lastName, photo, email }) => {
   const getPlatformIcon = (platform: string) => {
     switch (platform) {
       case "GitHub":
@@ -59,6 +60,21 @@ const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({ ShowLinks }) => {
   return (
     <div className="w-[560px] p-[24px] flex items-start justify-start bg-white rounded-[12px] relative mt-[40px] max-[950px]:hidden">
       <PhoneSimulatorPhoneSimulatorSVG />
+     
+      <div className="absolute top-[100px] left-[50px] flex flex-col items-center gap-4">
+        {photo && (
+          <Image
+            src={photo}
+            alt="Profile"
+            width={80}
+            height={80}
+            className="w-[100px] h-[100px] rounded-full object-cover absolute top-[-20px] left-19 "
+          />
+        )}
+        <p className="text-black font-semibold text-[16px]  absolute top-[100px]">{firstName} {lastName}</p>
+        <p  className="text-black  "> {email} </p>
+      </div>
+
       <div className="absolute flex flex-col w-[237px] left-[59px] top-[304px] gap-[24px]">
         {ShowLinks.map((item, i) => (
           <div
