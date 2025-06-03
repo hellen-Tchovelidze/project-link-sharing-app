@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { BlockK, LinkK, MailK } from "@/app/Common/Images/Auth";
 import { useRouter } from "next/navigation";
+import { setCookie } from "cookies-next";
 
 type FormValues = {
   email: string;
@@ -33,27 +34,22 @@ const LogInK = ({ setShow }: LogInKProps) => {
   } = useForm<FormValues>({ resolver: yupResolver(schema) });
   const router = useRouter();
 
-  const onSubmit = (data: FormValues) => {
-    const storedUsers = localStorage.getItem("users");
+  const onSubmit = async(data: FormValues) => {
+    const email = data.email
+    const password =data.password
+    if(!email || !password) return console.log('fiedls are required')
 
-    if (!storedUsers) {
-      alert("ანგარიში არ არსებობს!");
-      return;
-    }
+      const res = await fetch('http://localhost:4000/auth/sign-in', {
+        method:"POST",
+        headers: {'Content-Type':"Application/json"},
+        body: JSON.stringify({email, password})
+      })
+      const Data = res.json()
+      console.log(res, 'res')
+      if(res.status === 200){
+        router.push('/main')
+      }
 
-    const parsedUsers = JSON.parse(storedUsers);
-
-    const matchingUser = parsedUsers.find(
-      (user: FormValues) =>
-        user.email === data.email && user.password === data.password
-    );
-
-    if (matchingUser) {
-      localStorage.setItem("currentUser", JSON.stringify(matchingUser));
-      router.push("/main");
-    } else {
-      alert("სცადეთ ხელახლა!");
-    }
   };
 
   return (

@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { BlockK, LinkK, MailK } from "@/app/Common/Images/Auth";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   email: string;
@@ -45,28 +46,23 @@ const SignUpK = ({ setShow }: LogInKProps) => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data: FormValues) => {
-    const newUser = {
-      id:Date.now(),
-      email: data.email,
-      password: data.password,
-    };
+  const router = useRouter()
 
-    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
-    const emailAlreadyExists = existingUsers.some(
-      (user: FormValues) => user.email === newUser.email
-    );
+  const onSubmit = async(data: FormValues) => {
+    const email = data.email
+    const password = data.password
+    const confirmPassword = data.confirmPassword
+    if(!email || !password || !confirmPassword) return console.log('fields are required')
 
-    if (emailAlreadyExists) {
-      alert("This email is already registered.");
-      return;
-    }
-
-    const updatedUsers = [...existingUsers, newUser];
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    localStorage.setItem("currentUser", JSON.stringify(newUser));
-
-    setShow(false);
+      const res = await fetch('http://localhost:4000/auth/sign-up' , {
+        method:"POST",
+        headers: {'Content-Type':"Application/json"},
+        body: JSON.stringify({email,password,confirmPassword})
+      })
+      const Data = res.json()
+      if(res.status === 201) {
+        router.push('/')
+      }
   };
 
   return (
